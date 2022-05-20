@@ -12,10 +12,13 @@ const reactionSchema = new Schema(
         default: () => new Types.ObjectId()
       },
       reactionBody: {
-        type: String
+        type: String,
+        required: true,
+        maxlength: 280
       },
       username: {
-        type: String
+        type: String,
+        required: true
       },
       createdAt: {
         type: Date,
@@ -34,7 +37,10 @@ const reactionSchema = new Schema(
 const ThoughtSchema = new Schema(
     {
       thoughtText: {
-        type: String
+        type: String,
+        required: true,
+        minlength: 1, 
+        maxlength: 200
       },
       createdAt: {
         type: Date,
