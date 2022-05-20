@@ -1,5 +1,7 @@
 const { User, Thought } = require('../models');
 
+
+//Controller to perform the CRUD operations using Mongoose for the Thought model
 const thoughtController = {
 
   getAllThoughts(req,res) {
@@ -66,7 +68,35 @@ deleteThought({params}, res) {
     res.status(400).json(err);
   });
 },
+
+
+addReaction({ params, body }, res) {
+  Thought.findOneAndUpdate(
+    { _id: params.id },
+    { $push: { reactions: body } },
+    { new: true }
+  )
+    .then(userData => {
+      if (!userData) {
+        res.status(404).json({ message: 'No thought found with this id!' });
+        return;
+      }
+      res.json(userData);
+    })
+    .catch(err => res.json(err));
+},
+
+removeReaction({ params }, res) {
+  Thought.findOneAndUpdate(
+    { _id: params.thoughtId },
+    { $pull: { reactions: { reactionId: params.reactionId } } },
+    { new: true }
+  )
+    .then(reactionData => res.json(reactionData))
+    .catch(err => res.json(err));
+}
     
 }
 
+//Exports to be imported to the thoughts-routes file
 module.exports = thoughtController;
